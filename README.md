@@ -81,6 +81,27 @@ python app.py
 
 The API is available at http://127.0.0.1:5555
 
+---
+
+## Running the Frontend Client (`client-with-sessions`)
+
+The project includes the official session-based React authentication client provided for this lab.
+
+```bash
+# 1. Navigate to the client directory
+cd client-with-sessions
+
+# 2. Install dependencies
+npm install
+
+# 3. Start the React development server
+npm start
+```
+
+The frontend serves on **http://localhost:4000** and automatically proxies requests to the Flask backend running on **http://localhost:5555** (`"proxy": "http://localhost:5555"` in `package.json`), ensuring seamless cookie exchange without CORS configuration.
+
+---
+
 ### Environment Variables
 
 | Variable | Default | Description |
@@ -144,22 +165,29 @@ Status code key:
 ## Project Layout
 
 ```
-productivity-api/
-|-- app.py              Entry point - registers routes and runs the server
-|-- config.py           Flask app, database, migrations, bcrypt, API, cookie settings
-|-- models.py           User and Note SQLAlchemy models with validation
-|-- schemas.py          Marshmallow schemas for request validation and response serialisation
-|-- utils.py            Login decorator, JSON loader, ownership check, pagination helper
-|-- seed.py             Seeds the database with sample users and notes
-|-- Pipfile             Pinned dependencies
-|-- migrations/         Alembic migration history
-|-- resources/
-|   |-- __init__.py     Route registration
-|   |-- auth.py         Signup, Login, Logout, CheckSession resources
-|   -- notes.py        NoteList and NoteDetail resources (full CRUD)
--- tests/
-    |-- conftest.py     pytest fixtures (in-memory SQLite test database)
-    -- test_app.py     Full test suite - auth and notes
+productivity-app-phase5/
+|-- README.md                   Primary project documentation
+|-- client-with-sessions/       Frontend React client (session-based authentication)
+|   |-- package.json            Dependencies and proxy to http://localhost:5555
+|   |-- public/                 HTML shell, icons, manifest
+|   `-- src/                    React components (SignUpForm, LoginForm, NavBar, App)
+|-- productivity-api/           Backend Flask REST API
+    |-- app.py                  Entry point - registers routes and runs the server
+    |-- config.py               Flask app, database, migrations, bcrypt, API settings
+    |-- models.py               User and Note SQLAlchemy models with validation
+    |-- schemas.py              Marshmallow schemas for validation and serialization
+    |-- utils.py                Login decorator, JSON loader, ownership check, pagination
+    |-- seed.py                 Seeds the database with sample users and notes
+    |-- Pipfile                 Pinned dependencies
+    |-- pytest.ini              Pytest configuration
+    |-- migrations/             Alembic migration history
+    |-- resources/              Flask-RESTful Resource controllers
+    |   |-- __init__.py         Route registration
+    |   |-- auth.py             Signup, Login, Logout, CheckSession/Me resources
+    |   `-- notes.py            NoteList and NoteDetail resources (full CRUD)
+    `-- tests/                  Comprehensive test suite (16 passing tests)
+        |-- conftest.py         Pytest fixtures (in-memory SQLite test database)
+        `-- test_app.py         Auth and Notes CRUD tests
 ```
 
 ### Key Design Decisions
